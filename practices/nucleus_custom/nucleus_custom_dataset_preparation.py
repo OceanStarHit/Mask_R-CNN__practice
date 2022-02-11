@@ -30,6 +30,13 @@ datasets/instance/training/T5/val+\
 datasets/instance/training/T6/val+\
 datasets/instance/training/T8/val'
 
+def normalize_2Dim_uint8(im):
+    im = im.astype(np.float32)
+    min = np.min(im)
+    max = np.max(im)
+    im = (im-min)/(max-min)*255
+    return im.astype(np.uint8)
+
 
 def nucleus_custom_dataset_preparation(train_data, custom_dataset_dir='datasets/nucleus_custom/', subset='train'):
     print('Custom dataset directory: ', custom_dataset_dir)
@@ -97,7 +104,9 @@ def nucleus_custom_dataset_preparation(train_data, custom_dataset_dir='datasets/
             if not os.path.exists(fname_slice_imagdir):
                 os.mkdir(fname_slice_imagdir)
 
-            imag_slice = imag_array[n_slice]
+            imag_slice = normalize_2Dim_uint8(imag_array[n_slice])
+            if len(imag_slice.shape)==3:
+                imag_slice = imag_slice[..., 2]
             fname_slice_tif = fname_slice + '.tif'
             # skimage.io.imsave(os.path.join(custom_dataset_dir, subset,fname_png), np.uint8(imag_array[n_slice,:,:,0]/256))
             skimage.io.imsave(os.path.join(fname_slice_imagdir, fname_slice_tif), imag_slice)

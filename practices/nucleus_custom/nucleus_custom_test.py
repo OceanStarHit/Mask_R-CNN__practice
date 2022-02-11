@@ -33,7 +33,7 @@ from mrcnn import utils
 from mrcnn import model as modellib
 from mrcnn import visualize
 
-from samples.nucleus_custom.nucleus_custom import *
+from practices.nucleus_custom.nucleus_custom import *
 
 ROOT_DIR = os.path.abspath("./")
 
