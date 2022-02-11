@@ -124,10 +124,6 @@ Code is in the `samples/nucleus` directory.
 
 ![Nucleus Segmentation](assets/nucleus_segmentation.png)
 
-### [Reconstructing 3D buildings from aerial LiDAR](https://medium.com/geoai/reconstructing-3d-buildings-from-aerial-lidar-with-ai-details-6a81cb3079c0)
-A proof of concept project by [Esri](https://www.esri.com/), in collaboration with Nvidia and Miami-Dade County. Along with a great write up and code by Dmitry Kudinov, Daniel Hedges, and Omar Maher.
-![3D Building Reconstruction](assets/project_3dbuildings.png)
-
 ### [Usiigaci: Label-free Cell Tracking in Phase Contrast Microscopy](https://github.com/oist/usiigaci)
 A project from Japan to automatically track cells in a microfluidics platform. Paper is pending, but the source code is released.
 
