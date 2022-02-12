@@ -21,7 +21,6 @@ from mrcnn import model as modellib, utils
 #  Configurations
 ############################################################
 
-
 class CustomBBConfig(Config):
     """Configuration for training on the customBB dataset.
     Derives from the base Config class and overrides some values.
