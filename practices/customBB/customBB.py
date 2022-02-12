@@ -148,7 +148,6 @@ class CustomBBDataset(utils.Dataset):
         # ... more files
         # }
 
-
         # We mostly care about the x and y coordinates of each region
         # Note: In VIA 2.0, regions was changed from a dict to a list.
         annotations = json.load(open(os.path.join(dataset_dir, "via_annotations.json")))
@@ -225,4 +224,13 @@ class CustomBBDataset(utils.Dataset):
         class_ids = np.array([self.class_names.index(s['class']) for s in info['classes']])
 
         return mask, class_ids.astype(np.int32)
+
+
+    def image_reference(self, image_id):
+        """Return the customBB data of the image."""
+        info = self.image_info[image_id]
+        if info["source"] == "customBB":
+            return info["customBB"]
+        else:
+            super(self.__class__).image_reference(self, image_id)
 
