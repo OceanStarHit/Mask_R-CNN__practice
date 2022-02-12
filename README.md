@@ -35,7 +35,10 @@ to prepare the training data.
 This notebooks inspects the weights of a trained model and looks for anomalies and odd patterns.
 
 
-# Training on MS COCO
+# Training
+
+## Training on MS COCO
+
 We're providing pre-trained weights for MS COCO to make it easier to start. You can
 use those weights as a starting point to train your own variation on the network.
 Training and evaluation code is in `samples/coco/coco.py`. You can import this
@@ -66,7 +69,7 @@ python3 samples/coco/coco.py evaluate --dataset=/path/to/coco/ --model=last
 The training schedule, learning rate, and other parameters should be set in `samples/coco/coco.py`.
 
 
-# Training on Your Own Dataset
+## Training on Your Own Dataset
 
 Start by reading this [blog post about the balloon color splash sample](https://engineering.matterport.com/splash-of-color-instance-segmentation-with-mask-r-cnn-and-tensorflow-7c761e238b46). It covers the process starting from annotating images to training to using the results in a sample application.
 
@@ -84,7 +87,7 @@ all available in one dataset.
 
 See examples in `samples/shapes/train_shapes.ipynb`, `samples/coco/coco.py`, `samples/balloon/balloon.py`, and `samples/nucleus/nucleus.py`.
 
-## Differences from the Official Paper
+# Differences from the Official Paper
 This implementation follows the Mask RCNN paper for the most part, but there are a few cases where we deviated in favor of code simplicity and generalization. These are some of the differences we're aware of. If you encounter other differences, please do let us know.
 
 * **Image Resizing:** To support training multiple images per batch we resize all images to the same size. For example, 1024x1024px on MS COCO. We preserve the aspect ratio, so if an image is not square we pad it with zeros. In the paper the resizing is done such that the smallest side is 800px and the largest is trimmed at 1000px.
@@ -101,7 +104,7 @@ gradients (sum vs mean across batches and GPUs). Or, maybe the official model us
 clipping to avoid this issue. We do use gradient clipping, but don't set it too aggressively.
 We found that smaller learning rates converge faster anyway so we go with that.
 
-## Citation
+# Citation
 Use this bibtex to cite this repository:
 ```
 @misc{matterport_maskrcnn_2017,
@@ -114,7 +117,7 @@ Use this bibtex to cite this repository:
 }
 ```
 
-## Contributing
+# Contributing
 Contributions to this repository are welcome. Examples of things you can contribute:
 * Speed Improvements. Like re-writing some Python code in TensorFlow or Cython.
 * Training on other datasets.
@@ -123,7 +126,7 @@ Contributions to this repository are welcome. Examples of things you can contrib
 
 You can also [join our team](https://matterport.com/careers/) and help us build even more projects like this one.
 
-## Requirements
+# Requirements
 Python 3.4, TensorFlow 1.3, Keras 2.0.8 and other common packages listed in `requirements.txt`.
 
 ### MS COCO Requirements:
@@ -137,8 +140,7 @@ To train or test on MS COCO, you'll also need:
 If you use Docker, the code has been verified to work on
 [this Docker container](https://hub.docker.com/r/waleedka/modern-deep-learning/).
 
-
-## Installation
+# Installation
 1. Clone this repository
 2. Install dependencies
    ```bash
@@ -154,6 +156,7 @@ If you use Docker, the code has been verified to work on
     * Linux: https://github.com/waleedka/coco
     * Windows: https://github.com/philferriere/cocoapi.
     You must have the Visual C++ 2015 build tools on your path (see the repo for additional details)
+
 
 # Samples for datasets other than MS COCO
 If you extend this model to other datasets or build projects that use it, we'd love to hear from you.
