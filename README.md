@@ -35,6 +35,37 @@ to prepare the training data.
 This notebooks inspects the weights of a trained model and looks for anomalies and odd patterns.
 
 
+# Training on MS COCO
+We're providing pre-trained weights for MS COCO to make it easier to start. You can
+use those weights as a starting point to train your own variation on the network.
+Training and evaluation code is in `samples/coco/coco.py`. You can import this
+module in Jupyter notebook (see the provided notebooks for examples) or you
+can run it directly from the command line as such:
+
+```
+# Train a new model starting from pre-trained COCO weights
+python3 samples/coco/coco.py train --dataset=/path/to/coco/ --model=coco
+
+# Train a new model starting from ImageNet weights
+python3 samples/coco/coco.py train --dataset=/path/to/coco/ --model=imagenet
+
+# Continue training a model that you had trained earlier
+python3 samples/coco/coco.py train --dataset=/path/to/coco/ --model=/path/to/weights.h5
+
+# Continue training the last model you trained. This will find
+# the last trained weights in the model directory.
+python3 samples/coco/coco.py train --dataset=/path/to/coco/ --model=last
+```
+
+You can also run the COCO evaluation code with:
+```
+# Run COCO evaluation on the last trained model
+python3 samples/coco/coco.py evaluate --dataset=/path/to/coco/ --model=last
+```
+
+The training schedule, learning rate, and other parameters should be set in `samples/coco/coco.py`.
+
+
 # Training on Your Own Dataset
 
 Start by reading this [blog post about the balloon color splash sample](https://engineering.matterport.com/splash-of-color-instance-segmentation-with-mask-r-cnn-and-tensorflow-7c761e238b46). It covers the process starting from annotating images to training to using the results in a sample application.
@@ -94,6 +125,18 @@ You can also [join our team](https://matterport.com/careers/) and help us build 
 
 ## Requirements
 Python 3.4, TensorFlow 1.3, Keras 2.0.8 and other common packages listed in `requirements.txt`.
+
+### MS COCO Requirements:
+To train or test on MS COCO, you'll also need:
+* pycocotools (installation instructions below)
+* [MS COCO Dataset](http://cocodataset.org/#home)
+* Download the 5K [minival](https://dl.dropboxusercontent.com/s/o43o90bna78omob/instances_minival2014.json.zip?dl=0)
+  and the 35K [validation-minus-minival](https://dl.dropboxusercontent.com/s/s3tw5zcg7395368/instances_valminusminival2014.json.zip?dl=0)
+  subsets. More details in the original [Faster R-CNN implementation](https://github.com/rbgirshick/py-faster-rcnn/blob/master/data/README.md).
+
+If you use Docker, the code has been verified to work on
+[this Docker container](https://hub.docker.com/r/waleedka/modern-deep-learning/).
+
 
 ## Installation
 1. Clone this repository
