@@ -124,8 +124,6 @@ Contributions to this repository are welcome. Examples of things you can contrib
 * Accuracy Improvements.
 * Visualizations and examples.
 
-You can also [join our team](https://matterport.com/careers/) and help us build even more projects like this one.
-
 # Requirements
 Python 3.4, TensorFlow 1.3, Keras 2.0.8 and other common packages listed in `requirements.txt`.
 
