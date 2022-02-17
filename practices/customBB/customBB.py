@@ -40,6 +40,7 @@ from mrcnn import model as modellib
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../../")
+# ROOT_DIR = os.path.abspath("./")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library

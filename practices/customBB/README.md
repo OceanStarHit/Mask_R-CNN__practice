@@ -30,7 +30,21 @@ Generate submission file from `test` images
 python customBB.py detect --dataset=/path/to/dataset --subset=test --weights=<last or /path/to/weights.h5>
 ```
 
-### The Easiest Ways (Tested) 
+### Examples (Tested):
+```
+(mrcnn_env) E:\Working\Mask_R-CNN__practice\practices\customBB>python customBB.py train --datasets=E:/Working/Mask_R-CNN__practice/datasets/customBB --subset=train --weights=imagenet
+```
+```
+(mrcnn_env) E:\Working\Mask_R-CNN__practice\practices\customBB>python customBB.py train --datasets=E:/Working/Mask_R-CNN__practice/datasets/customBB --subset=train --weights=last
+```
+```
+(mrcnn_env) E:\Working\Mask_R-CNN__practice\practices\customBB>python customBB.py validate --datasets=E:/Working/Mask_R-CNN__practice/datasets/customBB --subset=val --weights=last
+```
+```
+(mrcnn_env) E:\Working\Mask_R-CNN__practice\practices\customBB>python customBB.py detect --datasets=E:/Working/Mask_R-CNN__practice/datasets/customBB --subset=test --weights=last
+```
+
+### The Easiest Ways without arguments (Tested) 
 ```
 (mrcnn_env) E:\Working\Mask_R-CNN__practice>python -m practices.customBB.customBB_train
 ```
