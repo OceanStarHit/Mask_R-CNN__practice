@@ -93,6 +93,12 @@ class CustomBBConfig(Config):
     DETECTION_MAX_INSTANCES = 400
 
 
+# Override the training configurations with a few changes for inferencing.
+class CustomBBInferenceConfig(CustomBBConfig):
+    # Run detection on one image at a time
+    GPU_COUNT = 1
+    IMAGES_PER_GPU = 1
+
 ############################################################
 #  Dataset
 ############################################################
@@ -229,7 +235,7 @@ class CustomBBDataset(utils.Dataset):
         """Return the customBB data of the image."""
         info = self.image_info[image_id]
         if info["source"] == "customBB":
-            return info["customBB"]
+            return info["path"]
         else:
             super(self.__class__).image_reference(self, image_id)
 
