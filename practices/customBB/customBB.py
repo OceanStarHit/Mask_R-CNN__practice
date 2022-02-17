@@ -158,72 +158,86 @@ class CustomBBDataset(utils.Dataset):
         assert subset in ["train", "val", "test"]
         dataset_dir = os.path.join(dataset_dir, subset)
 
-        # Load annotations
-        # VGG Image Annotator saves the annotations of images in the form below:
-        # {
-        # "11.jpg1391949":
-        # {   
-        #     "filename":"11.jpg",
-        #     "size":1391949,
-        #     "regions":
-        #     [
-        #         {   
-        #             "shape_attributes":
-        #             {
-        #                 "name":"circle",
-        #                 "cx":1157,
-        #                 "cy":137,
-        #                 "r":24.099
-        #             },
-        #             "region_attributes":
-        #             {
-        #                 "class":"bacteria"
-        #             }
-        #         }, 
-        #         ... more regions
-        #     ]
-        #    "file_attributes":{}
-        # },
-        # ... more files
-        # }
+        if subset in ["train", "val"]:
+            # Load annotations
+            # VGG Image Annotator saves the annotations of images in the form below:
+            # {
+            # "11.jpg1391949":
+            # {   
+            #     "filename":"11.jpg",
+            #     "size":1391949,
+            #     "regions":
+            #     [
+            #         {   
+            #             "shape_attributes":
+            #             {
+            #                 "name":"circle",
+            #                 "cx":1157,
+            #                 "cy":137,
+            #                 "r":24.099
+            #             },
+            #             "region_attributes":
+            #             {
+            #                 "class":"bacteria"
+            #             }
+            #         }, 
+            #         ... more regions
+            #     ]
+            #    "file_attributes":{}
+            # },
+            # ... more files
+            # }
 
-        # We mostly care about the x and y coordinates of each region
-        # Note: In VIA 2.0, regions was changed from a dict to a list.
-        annotations = json.load(open(os.path.join(dataset_dir, "via_annotations.json")))
-        annotations = list(annotations.values())  # don't need the dict keys
+            # We mostly care about the x and y coordinates of each region
+            # Note: In VIA 2.0, regions was changed from a dict to a list.
+            annotations = json.load(open(os.path.join(dataset_dir, "via_annotations.json")))
+            annotations = list(annotations.values())  # don't need the dict keys
 
-        # The VIA tool saves images in the JSON even if they don't have any
-        # annotations. Skip unannotated images.
-        annotations = [a for a in annotations if a['regions']]
+            # The VIA tool saves images in the JSON even if they don't have any
+            # annotations. Skip unannotated images.
+            annotations = [a for a in annotations if a['regions']]
 
-        # Add images
-        for a in annotations:
-            # Get the x, y coordinaets of points of the polygons that make up
-            # the outline of each object instance. These are stores in the
-            # shape_attributes (see json format above)
-            # The if condition is needed to support VIA versions 1.x and 2.x.
-            if type(a['regions']) is dict:
-                polygons = [r['shape_attributes'] for r in a['regions'].values()]
-                classes = [r['region_attributes'] for r in a['regions'].values()]
-            else:
-                polygons = [r['shape_attributes'] for r in a['regions']] 
-                classes = [r['region_attributes'] for r in a['regions']] 
+            # Add images
+            for a in annotations:
+                # Get the x, y coordinaets of points of the polygons that make up
+                # the outline of each object instance. These are stores in the
+                # shape_attributes (see json format above)
+                # The if condition is needed to support VIA versions 1.x and 2.x.
+                if type(a['regions']) is dict:
+                    polygons = [r['shape_attributes'] for r in a['regions'].values()]
+                    classes = [r['region_attributes'] for r in a['regions'].values()]
+                else:
+                    polygons = [r['shape_attributes'] for r in a['regions']] 
+                    classes = [r['region_attributes'] for r in a['regions']] 
 
-            # load_mask() needs the image size to convert polygons to masks.
-            # Unfortunately, VIA doesn't include it in JSON, so we must read
-            # the image. This is only managable since the dataset is tiny.
-            image_path = os.path.join(dataset_dir, "images", a['filename'])
-            image = skimage.io.imread(image_path)
-            height, width = image.shape[:2]
+                # load_mask() needs the image size to convert polygons to masks.
+                # Unfortunately, VIA doesn't include it in JSON, so we must read
+                # the image. This is only managable since the dataset is tiny.
+                image_path = os.path.join(dataset_dir, "images", a['filename'])
+                image = skimage.io.imread(image_path)
+                height, width = image.shape[:2]
 
-            self.add_image(
-                source="customBB",
-                image_id=a['filename'],  # use file name as a unique image id
-                path=image_path,
-                width=width, height=height,
-                polygons=polygons,
-                classes=classes
-                )
+                self.add_image(
+                    source="customBB",
+                    image_id=a['filename'],  # use file name as a unique image id
+                    path=image_path,
+                    width=width, height=height,
+                    polygons=polygons,
+                    classes=classes
+                    )
+        elif subset=="test":
+            # Get image ids from directory names
+            image_ids = next(os.walk(dataset_dir))[1]
+            # if subset == "train":
+            #     image_ids = list(set(image_ids) - set(VAL_IMAGE_IDS))
+
+            # Add images
+            for image_id in image_ids:
+                self.add_image(
+                    source="customBB",
+                    image_id=image_id,
+                    path=os.path.join(dataset_dir, image_id, "images/{}.jpg".format(image_id)))
+
 
 
     def load_mask(self, image_id):

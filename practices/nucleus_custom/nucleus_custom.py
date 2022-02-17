@@ -124,21 +124,12 @@ class NucleusCustomDataset(utils.Dataset):
         self.add_class(source="nucleus_custom", class_id=1, class_name="nucleus")
 
         # Which subset?
-        # "val": use hard-coded list above
-        # "train": use data from stage1_train minus the hard-coded list above
-        # else: use the data from the specified sub-directory
-        # assert subset in ["train", "val", "stage1_train", "stage1_test", "stage2_test"]
-        # subset_dir = "stage1_train" if subset in ["train", "val"] else subset
-        assert subset in ["train", "val", "stage1_train", "stage1_test", "stage2_test"]
+        assert subset in ["train", "val", "test"]
         subset_dir = subset
         dataset_dir = os.path.join(dataset_dir, subset_dir)
-        # if subset == "val":
-        #     image_ids = VAL_IMAGE_IDS
-        # else:
+        
         # Get image ids from directory names
         image_ids = next(os.walk(dataset_dir))[1]
-        # if subset == "train":
-        #     image_ids = list(set(image_ids) - set(VAL_IMAGE_IDS))
 
         # Add images
         for image_id in image_ids:
