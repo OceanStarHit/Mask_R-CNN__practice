@@ -13,11 +13,17 @@ Edited by Ocean Star ( talkoceanstar@outlook.com )
 # This has to be done before other importa that might
 # set it, but only if we're running in script mode
 # rather than being imported.
-if __name__ == '__main__':
-    import matplotlib
-    # Agg backend runs without a display
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
+# if __name__ == '__main__':
+#     import matplotlib
+#     # Agg backend runs without a display
+#     matplotlib.use('Agg')
+#     import matplotlib.pyplot as plt
+
+# if __name__ == '__main__':
+import matplotlib
+# Agg backend runs without a display
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 import os
 import sys
@@ -39,6 +45,9 @@ ROOT_DIR = os.path.abspath("../../")
 sys.path.append(ROOT_DIR)  # To find local version of the library
 from mrcnn import utils
 from mrcnn import visualize
+
+from glob import glob
+
 
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
@@ -132,6 +141,12 @@ class CustomBBInferenceConfig(CustomBBConfig):
     # Run detection on one image at a time
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
+    # Don't resize imager for inferencing
+    IMAGE_RESIZE_MODE = "pad64"
+    # Non-max suppression threshold to filter RPN proposals.
+    # You can increase this during training to generate more propsals.
+    RPN_NMS_THRESHOLD = 0.7
+
 
 ############################################################
 #  Dataset
@@ -227,17 +242,23 @@ class CustomBBDataset(utils.Dataset):
                     )
         elif subset=="test":
             # Get image ids from directory names
-            image_ids = next(os.walk(dataset_dir))[1]
-            # if subset == "train":
-            #     image_ids = list(set(image_ids) - set(VAL_IMAGE_IDS))
+            print(dataset_dir)
 
+            image_path = os.path.join(dataset_dir, "images")
+            # image_ids = next(os.walk(image_path))[0]
+            
+            image_ids = glob(os.path.join(image_path, '*.jpg'))
+            
             # Add images
             for image_id in image_ids:
+
+                image_id = image_id.split('/')[-1]
+                image_id = image_id.split('\\')[-1].split('.')[0]
+        
                 self.add_image(
                     source="customBB",
                     image_id=image_id,
-                    path=os.path.join(dataset_dir, image_id, "images/{}.jpg".format(image_id)))
-
+                    path=os.path.join(dataset_dir, "images/{}.jpg".format(image_id)))
 
 
     def load_mask(self, image_id):
@@ -286,6 +307,7 @@ class CustomBBDataset(utils.Dataset):
             return info["path"]
         else:
             super(self.__class__).image_reference(self, image_id)
+
 
 ############################################################
 #  RLE Encoding
@@ -348,6 +370,7 @@ def mask_to_rle(image_id, mask, scores):
 
 
 ############################################################
+
 def load_model_weight(model, weights):
     # Select weights file to load
     if weights.lower() == "imagenet":
@@ -443,10 +466,10 @@ def validate(args):
     print("Running on {}".format(dataset_dir))
 
     # Create directory
-    if not os.path.exists(RESULTS_DIR):
-        os.makedirs(RESULTS_DIR)
+    if not os.path.exists(args.results):
+        os.makedirs(args.results)
     submit_dir = "submit_validation_{:%Y%m%dT%H%M%S}".format(datetime.datetime.now())
-    submit_dir = os.path.join(RESULTS_DIR, submit_dir)
+    submit_dir = os.path.join(args.results, submit_dir)
     os.makedirs(submit_dir)
 
     # Read dataset
@@ -524,10 +547,10 @@ def detect(args):
     print("Running on {}".format(dataset_dir))
 
     # Create directory
-    if not os.path.exists(RESULTS_DIR):
-        os.makedirs(RESULTS_DIR)
+    if not os.path.exists(args.results):
+        os.makedirs(args.results)
     submit_dir = "submit_detection_{:%Y%m%dT%H%M%S}".format(datetime.datetime.now())
-    submit_dir = os.path.join(RESULTS_DIR, submit_dir)
+    submit_dir = os.path.join(args.results, submit_dir)
     os.makedirs(submit_dir)
 
     # Read dataset
@@ -596,12 +619,16 @@ if __name__ == '__main__':
                         default=DEFAULT_LOGS_DIR,
                         metavar="/path/to/logs/",
                         help='Logs and checkpoints directory (default=logs/)')
+    parser.add_argument('--results', required=False,
+                        default=RESULTS_DIR,
+                        metavar="/path/to/results/",
+                        help='Results directory (default=results/)')
     parser.add_argument('--subset', required=False,
                         metavar="Dataset sub-directory",
                         help="Subset of dataset to run training or prediction on")
     args = parser.parse_args()
 
-    if not args.command == "train" or "validate" or "detect":
+    if not args.command in ["train", "validate", "detect"]:
         print("'{}' is not recognized. "
               "Use 'train', 'validate' or 'detect'".format(args.command))
 

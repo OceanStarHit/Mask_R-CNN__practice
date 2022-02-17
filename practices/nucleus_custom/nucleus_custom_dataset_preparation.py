@@ -72,7 +72,7 @@ def nucleus_custom_dataset_preparation(train_data, custom_dataset_dir='datasets/
 
         # sub_dir = 
         fname_split = imag.split('/')[-1]
-        fname_split = imag.split('\\')[-1].split('.')
+        fname_split = fname_split.split('\\')[-1].split('.')
         fname_only = ''
         for i in range(len(fname_split)-1):
             fname_only = fname_only + fname_split[i]
