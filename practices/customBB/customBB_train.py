@@ -1,48 +1,11 @@
-"""
-Mask R-CNN
-Configurations and data loading code for the CustomBB dataset.
-
-Copyright (c) 2018 Matterport, Inc.
-Licensed under the MIT License (see LICENSE for details)
-
-Edited by Ocean Star ( talkoceanstar@outlook.com )
-
-"""
-
-# Set matplotlib backend
-# This has to be done before other importa that might
-# set it, but only if we're running in script mode
-# rather than being imported.
-if __name__ == '__main__':
-    import matplotlib
-    # Agg backend runs without a display
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-
-from distutils import command
 import os
-import sys
-import json
-import datetime
-import numpy as np
-import skimage.draw
-from imgaug import augmenters as iaa
 
+from practices.customBB.customBB import *
 
-from mrcnn.config import Config
-from mrcnn import model as modellib
-
-from customBB import *
-
+############################################################
 # Root directory of the project
 # ROOT_DIR = os.path.abspath("../../")
 ROOT_DIR = os.path.abspath("./")
-
-# Import Mask RCNN
-sys.path.append(ROOT_DIR)  # To find local version of the library
-from mrcnn import utils
-from mrcnn import visualize
-
 
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
@@ -52,7 +15,6 @@ DEFAULT_LOGS_DIR = os.path.join(ROOT_DIR, "logs")
 # Save submission files here
 RESULTS_DIR = os.path.join(ROOT_DIR, "results/customBB/")
 
-# Path to trained weights file
 
 ############################################################
 #  Command Line Interface

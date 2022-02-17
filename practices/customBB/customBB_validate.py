@@ -10,7 +10,7 @@ Edited by Ocean Star ( talkoceanstar@outlook.com )
 """
 import os
 
-from customBB import *
+from practices.customBB.customBB import *
 
 ############################################################
 # Root directory of the project

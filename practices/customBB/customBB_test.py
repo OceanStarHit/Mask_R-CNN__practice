@@ -11,7 +11,7 @@ Edited by Ocean Star ( talkoceanstar@outlook.com )
 
 import os
 
-from customBB import *
+from practices.customBB.customBB import *
 
 ############################################################
 # Root directory of the project
@@ -37,6 +37,7 @@ if __name__ == '__main__':
         dataset = "datasets/customBB"
         # weights = "imagenet"
         weights = "last"
+        # weights = "cBB2All_mask_rcnn_coco20220103T1350.h5"
         logs = DEFAULT_LOGS_DIR
         subset = "test"
         results = RESULTS_DIR

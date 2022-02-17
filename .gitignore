@@ -1,7 +1,7 @@
-datasets/
-logs/
+datasets/*
+logs/*
 models/
-results/
+results/*
 
 mask_rcnn_coco.h5
 

@@ -30,6 +30,17 @@ Generate submission file from `test` images
 python customBB.py detect --dataset=/path/to/dataset --subset=test --weights=<last or /path/to/weights.h5>
 ```
 
+## The Easiest Way
+```
+(mrcnn_env) E:\Working\Mask_R-CNN__practice>python -m practices.customBB.customBB_train
+```
+```
+(mrcnn_env) E:\Working\Mask_R-CNN__practice>python -m practices.customBB.customBB_validate
+```
+```
+(mrcnn_env) E:\Working\Mask_R-CNN__practice>python -m practices.customBB.customBB_test
+```
+
 
 ## Jupyter notebooks
 Two Jupyter notebooks are provided as well: `inspect_customBB_data.ipynb` and `inspect_customBB_model.ipynb`.
