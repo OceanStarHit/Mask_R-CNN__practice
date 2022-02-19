@@ -11,7 +11,8 @@ Edited by Ocean Star ( talkoceanstar@outlook.com )
 
 import os
 
-from practices.customBB.customBB import *
+# from practices.customBB.customBB import *
+from customBB import *
 
 ############################################################
 # Root directory of the project
